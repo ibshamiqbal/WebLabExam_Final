@@ -1,0 +1,142 @@
+<%- include("partials/header"); -%>
+<main style="margin-top: 10px">
+  <section
+    id="contact-form"
+    style="
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    "
+  >
+    <h2
+      style="
+        font-size: 27px;
+        margin-bottom: 20px;
+        font-weight: 500;
+        color: #1abc9c;
+      "
+    >
+      Contact Us
+    </h2>
+    <p>
+      If you have any questions or concerns, please don't hesitate to contact
+      us. You can reach us by filling out the form below:
+    </p>
+
+    <form action="/contact" method="post">
+      <label for="name">Name:</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        id="name"
+        required
+        style="
+          width: 100%;
+          padding: 10px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          color: black;
+        "
+      />
+
+      <label for="email">Email:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        id="email"
+        required
+        style="
+          width: 100%;
+          padding: 10px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          color: black;
+        "
+      />
+
+      <label for="message">Message:</label>
+      <textarea
+        id="message"
+        name="message"
+        rows="4"
+        id="message"
+        required
+        style="
+          width: 100%;
+          padding: 10px;
+          margin: 5px 0;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          color: #000;
+        "
+      ></textarea>
+
+      <button
+        type="submit"
+        id="send_button"
+        style="
+          background-color: #1abc9c;
+          color: #fff;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        "
+      >
+        Send Message
+      </button>
+    </form>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://smtpjs.com/v3/smtp.js"></script>
+<script>
+  var btn=document.getElementById("send_button");
+  btn.addEventListener('click', function(e){
+      var name=document.getElementById("name").value;
+      var email=document.getElementById("email").value;
+      var message=document.getElementById("message").value;
+      e.preventDefault();
+          Email.send({
+          Host : "smtp.elasticemail.com",
+          Username : "username_smtp",
+          Password : "generate_from_smtp_server",
+          To : 'your_email',
+          From : `${email}`,
+          Subject : `Name: ${name}`,
+          Body : `<br><br> ${message} <br><br> <strong>Name:<\strong> ${name} <br> <strong>Email:<\strong> ${email}`
+      }).then(
+          async message => {
+              if (message=="OK"){
+                  await Swal.fire({
+                      title: "Success!",
+                      text: "Message Sent Successfully!",
+                      icon: "success",
+                      background:"#1A1A1A",
+                      color:"#fff",
+                      customClass: "swal-size-sm",
+                  });
+              }
+              else{
+                  await Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "Something went wrong!",
+                      background:"#1A1A1A",
+                      color:"#fff",
+                      customClass: "swal-size-sm",
+                  });
+              }
+          }
+      ).then(async (res)=> {
+          await window.location.reload()
+      }
+      )
+  })
+  
+</script>
+<%- include("partials/footer"); -%>
